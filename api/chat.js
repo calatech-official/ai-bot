@@ -142,4 +142,32 @@ ${externalKnowledge}
       reply: "Oops — something went wrong on our side."
     });
   }
+
+function initCalatechChatbot() {
+  console.log("🔥 Initialising Calatech Chatbot");
+
+  if (document.getElementById("calatech-chatbot-button")) return;
+
+  // === CREATE BUTTON ===
+  const btn = document.createElement("button");
+  btn.id = "calatech-chatbot-button";
+  btn.innerText = "Ask Cali AI";
+  document.body.appendChild(btn);
+
+  console.log("✅ Chatbot button injected");
 }
+
+  (function () {
+  console.log("📦 Calatech chatbot script loaded");
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initCalatechChatbot);
+  } else {
+    initCalatechChatbot();
+  }
+
+  // expose for debugging
+  window.CalatechChatbot = {
+    init: initCalatechChatbot
+  };
+})();
