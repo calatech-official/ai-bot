@@ -15,8 +15,28 @@ export default async function handler(req, res) {
   const { history } = req.body;
 
   // === Load external Knowledge file ===
-  const knowledgePath = path.join(process.cwd(), 'api', 'Knowledge');
-  const externalKnowledge = fs.readFileSync(knowledgePath, 'utf8');
+  function loadKnowledge(dirPath) {
+  let output = '';
+
+  const entries = fs.readdirSync(dirPath, { withFileTypes: true });
+
+  for (const entry of entries) {
+    const fullPath = path.join(dirPath, entry.name);
+
+    if (entry.isDirectory()) {
+      output += `\n\n### ${entry.name.toUpperCase()} ###\n`;
+      output += loadKnowledge(fullPath);
+    } else if (entry.isFile()) {
+      output += `\n\n--- ${entry.name} ---\n`;
+      output += fs.readFileSync(fullPath, 'utf8');
+    }
+  }
+
+  return output;
+}
+
+const knowledgePath = path.join(process.cwd(), 'api', 'Knowledge');
+const externalKnowledge = loadKnowledge(knowledgePath);
 
   // === Combine internal and external knowledge ===
   const systemPrompt = `
