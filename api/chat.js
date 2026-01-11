@@ -1,6 +1,3 @@
-return res.status(200).json({ reply: "DEPLOYMENT TEST OK" });
-
-
 import fs from 'fs';
 import path from 'path';
 
