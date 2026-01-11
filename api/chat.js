@@ -12,6 +12,12 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
+  if (!req.body) {
+  return res.status(400).json({
+    error: "Missing request body"
+  });
+}
+  
 const history = req.body?.history || [];
 
   // === Load external Knowledge file ===
