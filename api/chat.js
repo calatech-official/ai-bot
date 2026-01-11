@@ -12,7 +12,7 @@ export default async function handler(req, res) {
     return res.status(200).end();
   }
 
-  const { history } = req.body;
+const history = req.body?.history || [];
 
   // === Load external Knowledge file ===
   function loadKnowledge(dirPath) {
