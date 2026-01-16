@@ -14,19 +14,36 @@ export default async function handler(req, res) {
 
   const { history } = req.body;
 
-  // === Load external Knowledge file ===
+ // === Load external Knowledge files ===
 let externalKnowledge = '';
 try {
   const knowledgeDir = path.join(process.cwd(), 'api', 'knowledge');
-  const files = fs.readdirSync(knowledgeDir);
   
-  files.forEach(file => {
-    const filePath = path.join(knowledgeDir, file);
-    const content = fs.readFileSync(filePath, 'utf8');
-    externalKnowledge += `\n\n${content}`;
-  });
+  // Function to read all files recursively
+  function readFilesRecursively(dir) {
+    let content = '';
+    const items = fs.readdirSync(dir);
+    
+    items.forEach(item => {
+      const fullPath = path.join(dir, item);
+      const stat = fs.statSync(fullPath);
+      
+      if (stat.isDirectory()) {
+        // Recursively read subdirectories
+        content += readFilesRecursively(fullPath);
+      } else {
+        // Read file content
+        const fileContent = fs.readFileSync(fullPath, 'utf8');
+        content += `\n\n=== ${item} ===\n${fileContent}`;
+      }
+    });
+    
+    return content;
+  }
+  
+  externalKnowledge = readFilesRecursively(knowledgeDir);
 } catch (err) {
-  console.log('No external knowledge files found');
+  console.log('No external knowledge files found:', err.message);
   externalKnowledge = '';
 }
 
