@@ -15,8 +15,14 @@ export default async function handler(req, res) {
   const { history } = req.body;
 
   // === Load external Knowledge file ===
-  const knowledgePath = path.join(process.cwd(), 'api', 'Knowledge');
-  const externalKnowledge = fs.readFileSync(knowledgePath, 'utf8');
+let externalKnowledge = '';
+try {
+  const knowledgePath = path.join(process.cwd(), 'api', 'knowledge');
+  externalKnowledge = fs.readFileSync(knowledgePath, 'utf8');
+} catch (err) {
+  console.log('No external knowledge file found, using empty string');
+  externalKnowledge = '';
+}
 
   // === Combine internal and external knowledge ===
   const systemPrompt = `
