@@ -17,10 +17,16 @@ export default async function handler(req, res) {
   // === Load external Knowledge file ===
 let externalKnowledge = '';
 try {
-  const knowledgePath = path.join(process.cwd(), 'api', 'knowledge');
-  externalKnowledge = fs.readFileSync(knowledgePath, 'utf8');
+  const knowledgeDir = path.join(process.cwd(), 'api', 'knowledge');
+  const files = fs.readdirSync(knowledgeDir);
+  
+  files.forEach(file => {
+    const filePath = path.join(knowledgeDir, file);
+    const content = fs.readFileSync(filePath, 'utf8');
+    externalKnowledge += `\n\n${content}`;
+  });
 } catch (err) {
-  console.log('No external knowledge file found, using empty string');
+  console.log('No external knowledge files found');
   externalKnowledge = '';
 }
 
