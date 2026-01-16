@@ -450,7 +450,7 @@ const callGPT = async (userMessage) => {
   const typingIndicator = appendMessage("Cali AI", "", true);
 
   try {
-    const response = await fetch("https://ai-bot-pied.vercel.app/api/chat.js", {
+    const response = await fetch("https://ai-bot-git-master-harrison18s-projects.vercel.app/api/chat.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ history: conversationHistory })
