@@ -288,7 +288,7 @@ Your goal is for the customer to think:
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
-        model: "gpt-4-turbo",
+        model: "gpt-4o",
         messages: [
           { role: "system", content: systemPrompt },
           ...history
