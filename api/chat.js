@@ -333,23 +333,69 @@ Your goal is for the customer to think:
       
       if (functionName === 'get_device_price') {
         try {
-          // TODO: Replace with your actual Replit API endpoint
-          const priceResponse = await fetch('YOUR_REPLIT_API_URL_HERE', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              model: functionArgs.device_model,
-              storage: functionArgs.storage || 'default',
-              condition: functionArgs.condition
-            })
-          });
+          // Use the new search endpoint
+          const searchQuery = encodeURIComponent(functionArgs.device_model);
+          const priceResponse = await fetch(`https://sell.calatech.co.uk/api/search?q=${searchQuery}`);
+          
+          if (!priceResponse.ok) {
+            throw new Error('Failed to fetch pricing data');
+          }
 
-          const priceData = await priceResponse.json();
-          functionResult = JSON.stringify(priceData);
+          const searchResults = await priceResponse.json();
+          
+          // Check if we found any matches
+          if (searchResults.count > 0 && searchResults.devices.length > 0) {
+            const device = searchResults.devices[0]; // Use first match
+            const condition = functionArgs.condition;
+            
+            // Map condition to API field names
+            const conditionMap = {
+              'Brand New': 'brandNew',
+              'Excellent': 'excellent',
+              'Good': 'good',
+              'Faulty': 'faulty'
+            };
+            
+            const priceField = conditionMap[condition];
+            const price = parseFloat(device.prices[priceField]);
+            const bonus = condition === 'Excellent' ? parseFloat(device.prices.excellentBonus || 0) : 0;
+            const totalPrice = price + bonus;
+            
+            let message = '';
+            if (price > 0) {
+              message = `We can offer £${price.toFixed(2)} for a ${condition} ${device.modelName}`;
+              if (bonus > 0) {
+                message += `. Plus, if the condition is flawless, we'll add an extra £${bonus.toFixed(2)} bonus, making it £${totalPrice.toFixed(2)} total!`;
+              }
+            } else {
+              message = `Unfortunately, we're not currently buying ${condition} ${device.modelName} devices.`;
+            }
+            
+            functionResult = JSON.stringify({
+              success: true,
+              device: device.modelName,
+              category: device.category,
+              condition: condition,
+              basePrice: price.toFixed(2),
+              bonus: bonus.toFixed(2),
+              totalPrice: totalPrice.toFixed(2),
+              storage: functionArgs.storage || 'standard',
+              message: message,
+              url: 'https://sell.calatech.co.uk'
+            });
+          } else {
+            // No matches found
+            functionResult = JSON.stringify({
+              success: false,
+              query: functionArgs.device_model,
+              message: `I couldn't find exact pricing for "${functionArgs.device_model}". Please visit https://sell.calatech.co.uk to get an accurate quote, or let me know the specific model (e.g., "iPhone 15 Pro") and I'll try again.`
+            });
+          }
         } catch (err) {
           console.error('Pricing API error:', err);
           functionResult = JSON.stringify({ 
-            error: "Unable to fetch live pricing at the moment. Please visit https://www.calatech.co.uk/pages/sell-my-phone-haverhill for a quote."
+            success: false,
+            error: "Unable to fetch live pricing at the moment. Please visit https://sell.calatech.co.uk for a quote."
           });
         }
       }
