@@ -73,21 +73,29 @@ You should sound like a knowledgeable, friendly in-store team member — never c
 ==========================
 
 1. Understand the customer's intent:
-   - Buying a device
+   - **Buying a device FROM Calatech** (they want to purchase)
+   - **Selling/Trading in TO Calatech** (they want to sell their device to us)
    - Repairing a device
-   - Selling / trading in
    - General advice or reassurance
 
-2. Reduce uncertainty:
+2. CRITICAL: If the customer's intent is ambiguous (e.g., "how much for an iPhone 15?"), ALWAYS ask clarifying questions:
+   - "Are you looking to buy an iPhone 15 from us, or get a quote for selling/trading in your current iPhone 15?"
+   
+3. When customers want to SELL/TRADE-IN to us:
+   - Use the get_device_price function to get live trade-in quotes
+   - Be specific about the model - if multiple devices match (e.g., "iPhone 15" could be iPhone 15, iPhone 15 Plus, iPhone 15 Pro), ask for clarification
+   - Always show prices for ALL conditions (Brand New, Excellent, Good, Faulty)
+   - Explain the Excellent condition bonus when applicable
+   
+4. When customers want to BUY from us:
+   - Do NOT use the pricing function (it shows trade-in prices, not selling prices)
+   - Direct them to the appropriate website section with links
+   - Be enthusiastic about our refurbished range and warranties
+
+5. Reduce uncertainty:
    - Explain things simply
    - Reassure where appropriate
    - Flag risks honestly (battery swelling, water damage, etc.)
-
-3. Guide to the best next step:
-   - View a product or collection on the website
-   - Book a repair online
-   - Sell or trade in - get a price on our website or use the pricing function if available
-   - Contact or visit in-studio
 
 Always aim to ask **at most ONE helpful follow-up question** if needed.
 
@@ -267,25 +275,16 @@ Your goal is for the customer to think:
       type: "function",
       function: {
         name: "get_device_price",
-        description: "Get the current trade-in or selling price for a device from Calatech's live pricing system. Use this when customers ask 'How much is my device worth?' or want a quote.",
+        description: "Get current TRADE-IN prices (what Calatech pays customers for their used devices). Use this ONLY when customers want to SELL or TRADE-IN their device to Calatech. Returns prices for all conditions: Brand New, Excellent, Good, and Faulty. If multiple devices match the search, return all matches so the assistant can ask the user for clarification.",
         parameters: {
           type: "object",
           properties: {
             device_model: {
               type: "string",
-              description: "The full device model name, e.g. 'iPhone 14 Pro', 'iPhone 13', 'Samsung Galaxy S23 Ultra'"
-            },
-            storage: {
-              type: "string",
-              description: "Storage capacity, e.g. '128GB', '256GB', '512GB', '1TB'"
-            },
-            condition: {
-              type: "string",
-              enum: ["Brand New", "Excellent", "Good", "Faulty"],
-              description: "The physical condition of the device"
+              description: "The device model to search for, e.g. 'iPhone 15', 'Samsung Galaxy S23'. Be as specific as possible."
             }
           },
-          required: ["device_model", "condition"]
+          required: ["device_model"]
         }
       }
     }
@@ -333,7 +332,7 @@ Your goal is for the customer to think:
       
       if (functionName === 'get_device_price') {
         try {
-          // Use the new search endpoint
+          // Use the search endpoint
           const searchQuery = encodeURIComponent(functionArgs.device_model);
           const priceResponse = await fetch(`https://sell.calatech.co.uk/api/search?q=${searchQuery}`);
           
@@ -343,59 +342,68 @@ Your goal is for the customer to think:
 
           const searchResults = await priceResponse.json();
           
-          // Check if we found any matches
+          // Check if we found matches
           if (searchResults.count > 0 && searchResults.devices.length > 0) {
-            const device = searchResults.devices[0]; // Use first match
-            const condition = functionArgs.condition;
             
-            // Map condition to API field names
-            const conditionMap = {
-              'Brand New': 'brandNew',
-              'Excellent': 'excellent',
-              'Good': 'good',
-              'Faulty': 'faulty'
-            };
-            
-            const priceField = conditionMap[condition];
-            const price = parseFloat(device.prices[priceField]);
-            const bonus = condition === 'Excellent' ? parseFloat(device.prices.excellentBonus || 0) : 0;
-            const totalPrice = price + bonus;
-            
-            let message = '';
-            if (price > 0) {
-              message = `We can offer £${price.toFixed(2)} for a ${condition} ${device.modelName}`;
-              if (bonus > 0) {
-                message += `. Plus, if the condition is flawless, we'll add an extra £${bonus.toFixed(2)} bonus, making it £${totalPrice.toFixed(2)} total!`;
-              }
+            // If multiple matches found, return all for clarification
+            if (searchResults.count > 1) {
+              const deviceList = searchResults.devices.map(d => d.modelName).slice(0, 5); // Show max 5
+              
+              functionResult = JSON.stringify({
+                success: false,
+                multipleMatches: true,
+                count: searchResults.count,
+                devices: deviceList,
+                message: `I found ${searchResults.count} devices matching "${functionArgs.device_model}". Which specific model are you asking about? ${deviceList.join(', ')}`
+              });
             } else {
-              message = `Unfortunately, we're not currently buying ${condition} ${device.modelName} devices.`;
+              // Single match - return all prices
+              const device = searchResults.devices[0];
+              
+              const brandNewPrice = parseFloat(device.prices.brandNew || 0);
+              const excellentPrice = parseFloat(device.prices.excellent || 0);
+              const excellentBonus = parseFloat(device.prices.excellentBonus || 0);
+              const goodPrice = parseFloat(device.prices.good || 0);
+              const faultyPrice = parseFloat(device.prices.faulty || 0);
+              
+              const excellentTotal = excellentPrice + excellentBonus;
+              
+              functionResult = JSON.stringify({
+                success: true,
+                device: device.modelName,
+                category: device.category,
+                prices: {
+                  brandNew: brandNewPrice.toFixed(2),
+                  excellent: excellentPrice.toFixed(2),
+                  excellentBonus: excellentBonus.toFixed(2),
+                  excellentTotal: excellentTotal.toFixed(2),
+                  good: goodPrice.toFixed(2),
+                  faulty: faultyPrice.toFixed(2)
+                },
+                message: `Here are our current trade-in prices for the ${device.modelName}:
+
+**Brand New (sealed):** £${brandNewPrice.toFixed(2)}
+**Excellent condition:** £${excellentPrice.toFixed(2)}${excellentBonus > 0 ? ` (plus up to £${excellentBonus.toFixed(2)} bonus if flawless = £${excellentTotal.toFixed(2)} total)` : ''}
+**Good condition:** £${goodPrice.toFixed(2)}
+**Faulty/Damaged:** £${faultyPrice.toFixed(2)}
+
+You can get an instant quote and complete the sale at https://sell.calatech.co.uk - we pay same day by 7PM!`,
+                url: 'https://sell.calatech.co.uk'
+              });
             }
-            
-            functionResult = JSON.stringify({
-              success: true,
-              device: device.modelName,
-              category: device.category,
-              condition: condition,
-              basePrice: price.toFixed(2),
-              bonus: bonus.toFixed(2),
-              totalPrice: totalPrice.toFixed(2),
-              storage: functionArgs.storage || 'standard',
-              message: message,
-              url: 'https://sell.calatech.co.uk'
-            });
           } else {
             // No matches found
             functionResult = JSON.stringify({
               success: false,
               query: functionArgs.device_model,
-              message: `I couldn't find exact pricing for "${functionArgs.device_model}". Please visit https://sell.calatech.co.uk to get an accurate quote, or let me know the specific model (e.g., "iPhone 15 Pro") and I'll try again.`
+              message: `I couldn't find "${functionArgs.device_model}" in our system. Could you provide the full model name? For example, "iPhone 15 Pro 256GB" or "Samsung Galaxy S23 Ultra". You can also visit https://sell.calatech.co.uk to browse all devices we buy.`
             });
           }
         } catch (err) {
           console.error('Pricing API error:', err);
           functionResult = JSON.stringify({ 
             success: false,
-            error: "Unable to fetch live pricing at the moment. Please visit https://sell.calatech.co.uk for a quote."
+            error: "Unable to fetch live pricing at the moment. Please visit https://sell.calatech.co.uk for an instant quote."
           });
         }
       }
