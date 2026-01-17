@@ -1,188 +1,379 @@
-IPHONE 14 SERIES
+📱 iPhone Knowledge Base
 
-  "series": "iPhone 14 Series",
-  "release_year": 2022,
-  "safety_features": {
-    "satellite": "Emergency SOS via Satellite (first in iPhone history)",
-    "crash_detection": "Dual high-g accelerometer and gyrometer for automatic emergency calls",
-    "biometrics": "Face ID (No Touch ID)"
-  },
-  "standard_models": {
-    "variants": ["iPhone 14", "iPhone 14 Plus"],
-    "chip": "A15 Bionic (5-core GPU version from 13 Pro)",
-    "display": "6.1\" (14) / 6.7\" (Plus) Super Retina XDR OLED, 60Hz",
-    "camera": "Dual 12MP Main (f/1.5) + 12MP Ultra Wide; Photonic Engine for low light",
-    "build": "Aerospace-grade Aluminum",
-    "design": "Retains the classic 'Notch'"
-  },
-  "pro_models": {
-    "variants": ["iPhone 14 Pro", "iPhone 14 Pro Max"],
-    "chip": "A16 Bionic (First 4nm chip)",
-    "design_evolution": "Dynamic Island (Interactive pill-shaped cutout replacing the notch)",
-    "display": "ProMotion 1-120Hz, Always-On technology",
-    "camera_system": {
-      "main": "48MP Main (First 48MP sensor on iPhone)",
-      "zoom": "3x Optical Zoom, 15x Digital Zoom",
-      "specialty": "ProRAW, Action Mode, Cinematic 4K 30fps"
-    },
-    "build": "Surgical-grade Stainless Steel"
-  },
-  "battery_connectivity": {
-    "charging": "Lightning Port (USB 2.0 speeds), MagSafe 15W",
-    "us_models": "eSIM only (No physical SIM tray in US models)",
-    "battery_life": "20h (14), 26h (14 Plus), 23h (14 Pro), 29h (14 Pro Max)"
-  },
-  "colors": ["Midnight", "Starlight", "Blue", "Purple", "Red", "Yellow (Spring 2023 release)"]
+iPhone 14 → iPhone 17
+
+iPhone 14 Series (Released 2022)
+Overview
+
+The iPhone 14 series focused on safety features, camera processing improvements, and introduced Dynamic Island on Pro models.
+
+Safety & Security
+
+Emergency SOS via Satellite (first iPhone generation to include this)
+
+Crash Detection using high-g accelerometer and gyroscope
+
+Face ID on all models (no Touch ID)
 
 
-IPHONE 15 SERIES
 
-  "series": "iPhone 15 Series",
-  "release_year": 2023,
-  "universal_updates": {
-    "port": "USB-C (Replaced Lightning across all models)",
-    "display_feature": "Dynamic Island (Standard on all models)",
-    "charging": "Supports MagSafe, Qi2 (after iOS 17.2), and 4.5W Reverse Wired charging"
-  },
-  "standard_models": {
-    "variants": ["iPhone 15", "iPhone 15 Plus"],
-    "chip": "A16 Bionic (from 14 Pro)",
-    "display": "6.1\" (15) / 6.7\" (Plus) Super Retina XDR OLED, 60Hz",
-    "brightness": "2000 nits peak (outdoor)",
-    "camera": "48MP Main (f/1.6) with 2x optical-quality zoom, 12MP Ultra Wide",
-    "build": "Aluminum with color-infused glass back",
-    "usb_speed": "USB 2.0 (480 Mbps)"
-  },
-  "pro_models": {
-    "variants": ["iPhone 15 Pro", "iPhone 15 Pro Max"],
-    "chip": "A17 Pro (3nm - First 'Pro' branded chip)",
-    "ram": "8GB (Minimum required for Apple Intelligence)",
-    "build": "Grade 5 Titanium frame, lighter and stronger than stainless steel",
-    "display": "120Hz ProMotion, Always-On technology",
-    "camera_system": {
-      "main": "48MP Main (f/1.78) with ProRAW support",
-      "zoom": "3x Optical (Pro) / 5x Optical Tetraprism (Pro Max)",
-      "video": "ProRes video recording up to 4K 60fps directly to external drive"
-    },
-    "controls": "Action Button (Replaced Mute Switch - customizable)",
-    "usb_speed": "USB 3.2 Gen 2 (10 Gbps for fast data transfer)"
-  },
-  "battery": {
-    "15": "Up to 20 hours video",
-    "15_plus": "Up to 26 hours video",
-    "15_pro": "Up to 23 hours video",
-    "15_pro_max": "Up to 29 hours video"
+iPhone 14 / iPhone 14 Plus
+
+Positioning: Reliable everyday iPhones with strong battery life and OLED displays.
+
+Display:
+
+iPhone 14: 6.1" OLED, 60Hz
+
+iPhone 14 Plus: 6.7" OLED, 60Hz
+
+Chip: A15 Bionic (same version used in iPhone 13 Pro)
+
+Camera:
+
+12MP Main (f/1.5)
+
+12MP Ultra Wide
+
+Photonic Engine for improved low-light photos
+
+Design: Classic notch design
+
+Build: Aerospace-grade aluminium
+
+Battery life:
+
+iPhone 14: up to 20 hours video
+
+iPhone 14 Plus: up to 26 hours video
 
 
-IPHONE 16 SERIES 
 
-  "model": "iPhone 16 / 16 Plus",
-  "release_year": 2024,
-  "specs": {
-    "display": "6.1-inch (16) / 6.7-inch (Plus) Super Retina XDR OLED, 2000 nits peak",
-    "chip": "A18 Chip (optimized for Apple Intelligence)",
-    "ram": "8GB (required for AI)",
-    "storage": "128GB, 256GB, 512GB",
-    "battery": "USB-C charging; 22h video (16) / 27h video (Plus)"
-  ,
-  "camera": {
-    "main": "48MP Fusion (f/1.6) with 2x Optical Quality Zoom",
-    "ultrawide": "12MP with Autofocus (Supports Macro Photography)",
-    "special_features": "Spatial Video/Photo for Apple Vision Pro"
-  ,
-  "hardware_controls": {
-    "camera_control": "Tactile sapphire button for zoom, exposure, and focus",
-    "action_button": "Customizable shortcut button (Mute, Flashlight, Translate)"
-  ,
-  "ai_features": [
-    "Apple Intelligence: Writing tools, Photo Clean Up, Genmoji",
-    "Visual Intelligence: Instant info via Camera Control button"
-  ,
-  "durability": "Ceramic Shield (50% tougher than gen 1), IP68 Water Resistance",
-  "connectivity": "Wi-Fi 7, Bluetooth 5.3, MagSafe (up to 25W), eSIM only (US)"
+iPhone 14 Pro / iPhone 14 Pro Max
 
-IPHONE 16 PRO SERIES
+Positioning: Major step forward in display and camera technology.
 
-  "model_series": "iPhone 16 Pro / 16 Pro Max",
-  "release_year": 2024,
-  "build_material": "Grade 5 Titanium with Textured Matte Glass back",
-  "display": {
-    "tech": "Always-On Super Retina XDR with ProMotion (120Hz)",
-    "pro_size": "6.3-inch (2622x1206)",
-    "pro_max_size": "6.9-inch (2868x1320) - Largest iPhone display to date",
-    "brightness": "2000 nits peak (outdoor), 1 nit minimum (night)"
-  },
-  "performance": {
-    "chip": "A18 Pro (6-core GPU, 20% better sustained performance than A17 Pro)",
-    "ram": "8GB LPDDR5X",
-    "thermal": "New aluminum substructure for superior heat dissipation",
-    "storage": {
-      "16_pro": ["128GB", "256GB", "512GB", "1TB"],
-      "16_pro_max": ["256GB", "512GB", "1TB"]
-    }
-  },
-  "camera_system": {
-    "main_fusion": "48MP (f/1.78) with 2nd Gen Sensor-Shift OIS",
-    "ultrawide": "48MP (Upgraded from 12MP) for high-res Macro and Wide shots",
-    "telephoto": "12MP 5x Optical Zoom (Now on both Pro and Pro Max models)",
-    "video_pro": "4K 120 fps Dolby Vision (World's first in a smartphone)",
-    "audio": "4 Studio-quality mics with 'Audio Mix' (In-frame, Studio, Cinematic modes)"
-  },
-  "hardware_inputs": {
-    "camera_control": "Sapphire-surface tactile button for focus, exposure, and zoom",
-    "action_button": "User-configurable physical shortcut button"
-  },
-  "connectivity": {
-    "usb_c": "USB 3.2 Gen 2 (Up to 10Gb/s transfer speeds)",
-    "wireless": "Wi-Fi 7, Bluetooth 5.3, MagSafe up to 25W",
-    "network": "Snapdragon X71 5G Modem, Second-gen Ultra Wideband chip"
-  },
-  "battery_life": {
-    "16_pro": "Up to 27 hours video playback",
-    "16_pro_max": "Up to 33 hours video playback (Best in iPhone history)"
-  },
-  "colors": ["Black Titanium", "White Titanium", "Natural Titanium", "Desert Titanium"]
+Chip: A16 Bionic (first 4nm iPhone chip)
 
-IPHONE 17 SERIES
+Display:
 
-  "series": "iPhone 17 (Late 2025 Lineup)",
-  "models": {
-    "standard": ["iPhone 17"],
-    "ultra_slim": ["iPhone 17 Air"],
-    "pro": ["iPhone 17 Pro", "iPhone 17 Pro Max"]
-  },
-  "major_upgrades_all_models": {
-    "display": "120Hz ProMotion and Always-On Display standard across ALL models",
-    "brightness": "3,000 nits peak (outdoor), 1 nit minimum (night)",
-    "durability": "Ceramic Shield 2 (3x more scratch-resistant than previous gen)",
-    "selfie_camera": "18MP Center Stage with square sensor (auto-rotates without turning phone)",
-    "networking": "Apple N1 chip (Wi-Fi 7 + Bluetooth 6.0 standard)"
-  },
-  "model_details": {
-    "iphone_17": {
-      "display": "6.3-inch OLED",
-      "chip": "A19 (6-core CPU, 5-core GPU)",
-      "rear_cameras": "Dual 48MP (Fusion + Ultra Wide)",
-      "battery": "Up to 30 hours video playback"
-    },
-    "iphone_17_air": {
-      "design": "Ultra-slim 5.6mm titanium body (thinnest iPhone ever)",
-      "display": "6.5-inch OLED",
-      "chip": "A19 Pro (6-core CPU, 5-core GPU)",
-      "rear_cameras": "Single 48MP Fusion lens (no Macro/Spatial support due to slim profile)",
-      "storage": "Starts at 256GB"
-    },
-    "iphone_17_pro_series": {
-      "sizes": "6.3-inch (Pro) / 6.9-inch (Pro Max)",
-      "chip": "A19 Pro (6-core CPU, 6-core GPU + Vapour Chamber cooling)",
-      "ram": "12GB LPDDR5X (optimized for advanced Apple Intelligence)",
-      "rear_cameras": "Triple 48MP setup (Fusion, Ultra Wide, and 8x Telephoto on Pro Max)",
-      "video": "4K 120fps Dolby Vision, ProRes RAW, Genlock support",
-      "battery": "Up to 37 hours video playback (Pro Max)"
-    }
-  },
-  "charging": {
-    "wired": "Up to 50% in 20 mins (requires 40W adapter)",
-    "wireless": "25W MagSafe, Qi2.2 support"
+ProMotion 1–120Hz
+
+Always-On Display
+
+Dynamic Island (replaced the notch)
+
+Camera system:
+
+48MP Main camera (first 48MP iPhone)
+
+3x optical zoom
+
+ProRAW support
+
+Action Mode video
+
+Cinematic Mode up to 4K 30fps
+
+Build: Surgical-grade stainless steel
+
+Battery life:
+
+iPhone 14 Pro: up to 23 hours video
+
+iPhone 14 Pro Max: up to 29 hours video
+
+Charging & Connectivity (All iPhone 14 Models)
+
+Lightning port (USB 2.0 speeds)
+
+MagSafe up to 15W
+
+US models are eSIM-only (no physical SIM tray)
+
+Colours
+
+Midnight
+
+Starlight
+
+Blue
+
+Purple
+
+Red
+
+Yellow (added Spring 2023)
 
 
+
+iPhone 15 Series (Released 2023)
+Overview
+
+The iPhone 15 series introduced USB-C across all models and major camera upgrades, especially on Pro models.
+
+Shared Features (All Models)
+
+USB-C charging (Lightning removed)
+
+Dynamic Island on all models
+
+MagSafe and Qi2 wireless charging
+
+Supports wired reverse charging (low-power accessories)
+
+iPhone 15 / iPhone 15 Plus
+
+Positioning: Modern everyday iPhones with excellent cameras.
+
+Display:
+
+6.1" (15) / 6.7" (15 Plus)
+
+OLED, 60Hz
+
+Up to 2000 nits outdoor brightness
+
+Chip: A16 Bionic
+
+Camera:
+
+48MP Main with 2x optical-quality zoom
+
+12MP Ultra Wide
+
+Build: Aluminium frame with colour-infused glass back
+
+USB-C speed: USB 2.0 (480 Mbps)
+
+Battery life:
+
+iPhone 15: up to 20 hours video
+
+iPhone 15 Plus: up to 26 hours video
+
+iPhone 15 Pro / iPhone 15 Pro Max
+
+Positioning: Performance-focused Pro devices with advanced video and photography.
+
+Chip: A17 Pro (3nm, first “Pro”-branded chip)
+
+RAM: 8GB (required for Apple Intelligence)
+
+Build: Grade 5 titanium frame (lighter than stainless steel)
+
+Display:
+
+ProMotion 120Hz
+
+Always-On Display
+
+Camera system:
+
+48MP Main with ProRAW
+
+3x optical zoom (Pro)
+
+5x optical tetraprism zoom (Pro Max)
+
+ProRes video up to 4K 60fps to external storage
+
+Controls:
+
+Action Button (replaced mute switch)
+
+USB-C speed: USB 3.2 Gen 2 (up to 10Gbps)
+
+
+
+iPhone 16 / 16 Plus (Released 2024)
+Overview
+
+The iPhone 16 series focused on AI readiness, camera usability, and refined hardware controls.
+
+Display:
+
+6.1" (16) / 6.7" (Plus)
+
+OLED, up to 2000 nits
+
+Chip: A18
+
+RAM: 8GB (required for Apple Intelligence)
+
+Storage: 128GB / 256GB / 512GB
+
+Battery life:
+
+iPhone 16: up to 22 hours video
+
+iPhone 16 Plus: up to 27 hours video
+
+Camera
+
+48MP Fusion Main camera with 2x optical-quality zoom
+
+12MP Ultra Wide with autofocus
+
+Macro photography supported
+
+Spatial photo and video capture for Apple Vision Pro
+
+Hardware Controls
+
+Camera Control button (sapphire tactile button for zoom, focus, exposure)
+
+Action Button (customisable shortcuts)
+
+AI & Durability
+
+Apple Intelligence features:
+
+Writing tools
+
+Photo Clean Up
+
+Genmoji
+
+Visual Intelligence via Camera Control
+
+Ceramic Shield (50% tougher than first generation)
+
+IP68 water resistance
+
+Connectivity:
+
+Wi-Fi 7
+
+Bluetooth 5.3
+
+MagSafe up to 25W
+
+eSIM-only in the US
+
+iPhone 16 Pro / 16 Pro Max (Released 2024)
+Overview
+
+The most advanced iPhones of their generation, focused on performance, video, and photography.
+
+Build: Grade 5 titanium with matte glass back
+
+Display:
+
+Pro: 6.3"
+
+Pro Max: 6.9" (largest iPhone display to date)
+
+Always-On OLED with ProMotion 120Hz
+
+2000 nits peak / 1 nit minimum
+
+Performance
+
+Chip: A18 Pro
+
+RAM: 8GB LPDDR5X
+
+Improved thermal design with aluminium substructure
+
+Storage:
+
+Pro: 128GB → 1TB
+
+Pro Max: 256GB → 1TB
+
+Camera System
+
+48MP Main Fusion with 2nd-gen sensor-shift OIS
+
+48MP Ultra Wide (major upgrade from 12MP)
+
+12MP Telephoto with 5x optical zoom (on both Pro models)
+
+Video:
+
+4K 120fps Dolby Vision
+
+Pro-level audio recording with Audio Mix modes
+
+Battery
+
+iPhone 16 Pro: up to 27 hours video
+
+iPhone 16 Pro Max: up to 33 hours video (best in iPhone history)
+
+Colours
+
+Black Titanium
+
+White Titanium
+
+Natural Titanium
+
+Desert Titanium
+
+
+
+⚠️ iPhone 17 Series 2025 released
+
+
+iPhone 17
+
+iPhone 17 Air (ultra-slim)
+
+iPhone 17 Pro
+
+iPhone 17 Pro Max
+
+Expected Shared Features
+
+ProMotion 120Hz and Always-On Display on all models
+
+Peak brightness up to 3000 nits
+
+Ceramic Shield 2 (improved scratch resistance)
+
+18MP front camera with Center Stage
+
+Apple N1 networking chip (Wi-Fi 7 + Bluetooth 6)
+
+Expected Model Details
+iPhone 17
+
+6.3" OLED display
+
+A19 chip
+
+Dual 48MP rear cameras
+
+Up to 30 hours video playback
+
+iPhone 17 Air
+
+Ultra-slim titanium body (~5.6mm)
+
+6.5" OLED display
+
+A19 Pro chip
+
+Single 48MP rear camera
+
+Storage starts at 256GB
+
+iPhone 17 Pro / Pro Max
+
+A19 Pro chip with vapour chamber cooling
+
+RAM: 12GB (for advanced Apple Intelligence)
+
+Triple 48MP rear cameras
+
+Up to 8x optical zoom (Pro Max)
+
+Battery life up to 37 hours video (Pro Max)
+
+Expected Charging
+
+Wired: up to 50% in ~20 minutes (40W adapter)
+
+Wireless: MagSafe 25W, Qi2.2 support
