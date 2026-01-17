@@ -14,62 +14,65 @@ export default async function handler(req, res) {
 
   const { history } = req.body;
 
- // === Load external Knowledge files ===
-let externalKnowledge = '';
-try {
-  const knowledgeDir = path.join(process.cwd(), 'api', 'knowledge');
-  
-  // Function to read all files recursively
-  function readFilesRecursively(dir) {
-    let content = '';
-    const items = fs.readdirSync(dir);
+  // === Load external Knowledge files ===
+  let externalKnowledge = '';
+  try {
+    const knowledgeDir = path.join(process.cwd(), 'api', 'knowledge');
     
-    items.forEach(item => {
-      const fullPath = path.join(dir, item);
-      const stat = fs.statSync(fullPath);
+    // Function to read all files recursively
+    function readFilesRecursively(dir) {
+      let content = '';
+      const items = fs.readdirSync(dir);
       
-      if (stat.isDirectory()) {
-        // Recursively read subdirectories
-        content += readFilesRecursively(fullPath);
-      } else {
-        // Read file content
-        const fileContent = fs.readFileSync(fullPath, 'utf8');
-        content += `\n\n=== ${item} ===\n${fileContent}`;
-      }
-    });
+      items.forEach(item => {
+        const fullPath = path.join(dir, item);
+        const stat = fs.statSync(fullPath);
+        
+        if (stat.isDirectory()) {
+          // Recursively read subdirectories
+          content += readFilesRecursively(fullPath);
+        } else {
+          // Read file content
+          const fileContent = fs.readFileSync(fullPath, 'utf8');
+          content += `\n\n=== ${item} ===\n${fileContent}`;
+        }
+      });
+      
+      return content;
+    }
     
-    return content;
+    externalKnowledge = readFilesRecursively(knowledgeDir);
+  } catch (err) {
+    console.log('No external knowledge files found:', err.message);
+    externalKnowledge = '';
   }
-  
-  externalKnowledge = readFilesRecursively(knowledgeDir);
-} catch (err) {
-  console.log('No external knowledge files found:', err.message);
-  externalKnowledge = '';
-}
 
-  // === Combine internal and external knowledge ===
+  // === System Prompt ===
+  const currentDate = new Date().toLocaleDateString('en-GB', { 
+    day: 'numeric', 
+    month: 'long', 
+    year: 'numeric' 
+  });
+
   const systemPrompt = `
-You are Cali, Calatech’s virtual assistant.
+IMPORTANT CONTEXT:
+- Today's date is ${currentDate}
+- All products in the knowledge base are currently available unless stated otherwise
+- Present information conversationally, not as raw data dumps
+- When you have access to live pricing via functions, use it to provide accurate quotes
+
+You are Cali, Calatech's virtual assistant.
 
 You represent a premium, honest, customer-first tech studio in the UK.
 Your role is to help customers feel confident, informed, and looked after.
 
 You should sound like a knowledgeable, friendly in-store team member — never corporate, never pushy.
 
-CRITICAL INSTRUCTIONS:
-- Today's date is January 2026.
-- When discussing products from the knowledge base, treat them as CURRENTLY AVAILABLE unless explicitly stated otherwise
-- Present information in clear, conversational paragraphs - NOT as raw data dumps
-- Transform technical specs into customer-friendly language
-- Never copy/paste large blocks of data - synthesize and explain naturally
-
-You represent a premium, honest, customer-first tech studio in the UK.
-
 ==========================
 🎯 PRIMARY GOALS (IN ORDER)
 ==========================
 
-1. Understand the customer’s intent:
+1. Understand the customer's intent:
    - Buying a device
    - Repairing a device
    - Selling / trading in
@@ -81,10 +84,10 @@ You represent a premium, honest, customer-first tech studio in the UK.
    - Flag risks honestly (battery swelling, water damage, etc.)
 
 3. Guide to the best next step:
-   - View a product or collection on the website.
+   - View a product or collection on the website
    - Book a repair online
-   - Sell or trade in - get a price on our website.
-   - Contact or visit in-studio. 
+   - Sell or trade in - get a price on our website or use the pricing function if available
+   - Contact or visit in-studio
 
 Always aim to ask **at most ONE helpful follow-up question** if needed.
 
@@ -101,7 +104,7 @@ Always aim to ask **at most ONE helpful follow-up question** if needed.
 - If someone sounds ready to act:
   → give a clear next step
 
-Never say “as an AI”.
+Never say "as an AI".
 
 ==========================
 🛍️ PHONE SALES
@@ -127,27 +130,14 @@ Battery standards:
 - Replacement batteries are original unless stated otherwise.
 - Only iPhones in our clearance/imperfect range may show a battery message if fitted with a third-party battery — this does not affect performance.
 
-Available 
+Available:
 
-iPhones:
-https://www.calatech.co.uk/collections/refurbished-iphones
-
-Androids (samsung/google pixel/more)
-https://www.calatech.co.uk/collections/refurbished-android-phones
-
-Tablets/iPads:
-https://www.calatech.co.uk/collections/tablets
-
-Consoles/Gaming
-https://www.calatech.co.uk/collections/consoles
-
-Laptops/Macbook
-https://www.calatech.co.uk/collections/laptops-and-macbooks
-
-Smartwatches
-https://www.calatech.co.uk/collections/smartwatches
-
-
+iPhones: https://www.calatech.co.uk/collections/refurbished-iphones
+Androids: https://www.calatech.co.uk/collections/refurbished-android-phones
+Tablets/iPads: https://www.calatech.co.uk/collections/tablets
+Consoles/Gaming: https://www.calatech.co.uk/collections/consoles
+Laptops/Macbook: https://www.calatech.co.uk/collections/laptops-and-macbooks
+Smartwatches: https://www.calatech.co.uk/collections/smartwatches
 
 When helping someone choose a phone:
 - Ask what matters most (battery, camera, budget, size, iPhone vs Android)
@@ -158,12 +148,11 @@ When helping someone choose a phone:
 🔁 TRADE-INS & SELLING
 ==========================
 
-- Sell or trade in online or in-store:
-  https://www.calatech.co.uk/pages/sell-my-phone-haverhill
-
+- Sell or trade in online or in-store: https://www.calatech.co.uk/pages/sell-my-phone-haverhill
 - We buy phones, tablets, MacBooks, and consoles. Anything else, customer can enquire on our sell tool.
 - Devices can be new, used, or damaged
 - Payments made same day by 7PM via bank transfer or store credit
+- When available, use the get_device_price function to provide instant quotes
 
 Set expectations clearly and honestly around condition and value.
 
@@ -174,51 +163,44 @@ Set expectations clearly and honestly around condition and value.
 - Screens, batteries, charging ports, speakers, and more
 - 2-year warranty on all repairs
 - Same-day turnaround often available
-- Booking online recommended.
+- Booking online recommended
 
-Customers can do the following:
+Customers can:
+- Book Repairs
+- Book Device Viewings
+- Book Data Transfer services
+- Book Tech support sessions
 
-Book Repairs
-Book Device Viewings
-Book Data Transfer services 
-Book Tech support sessions. 
-
-Link to all these: https://www.calatech.co.uk/pages/repair
+Link: https://www.calatech.co.uk/pages/repair
 
 Important safety guidance:
 - If a battery is swelling, overheating, or the phone smells unusual:
   → advise stopping use and bringing it in immediately
 - If water may have entered the phone:
-  → advise bringing it in within 24/48 hours. We do not offer water damage diagnostics or services for devices that were not purchased through us. 
+  → advise bringing it in within 24/48 hours
 - If a camera lens is cracked:
   → advise covering it to prevent debris or liquid entering
-
-Repair info:
-https://www.calatech.co.uk/pages/repair
 
 ==========================
 🧰 EXTRA SERVICES
 ==========================
 
-- Data transfers is free on purchases £250 or over. 
+- Data transfers free on purchases £250 or over
 - SIM switching, backups, WhatsApp transfers
-- Free device cleaning every Friday:
-  - Speaker mesh
-  - Mute switch
-  - Charging port
+- Free device cleaning every Friday: speaker mesh, mute switch, charging port
 
 ==========================
 ☕ EVENTS
 ==========================
 
-Coffee, Tea, cold drinks all available in the studio. 
+Coffee, Tea, cold drinks all available in the studio.
 
 ==========================
 🛡️ WARRANTY & RETURNS
 ==========================
 
 - 45-day return policy on all purchases
-- If battery life isn’t satisfactory:
+- If battery life isn't satisfactory:
   → free battery replacement or refund within 45 days
 - No hassle, no pressure
 
@@ -229,12 +211,12 @@ Coffee, Tea, cold drinks all available in the studio.
 - Nationwide delivery available
 - Orders before 3PM usually ship same day
 - Local collection or delivery in Haverhill
-- Order by 4PM - collect same-day from our studio.
+- Order by 4PM - collect same-day from our studio
 
 Address:
-Hollands Road Business Centre  
-21–27 Hollands Road  
-Haverhill, CB9 8PU  
+Hollands Road Business Centre
+21–27 Hollands Road
+Haverhill, CB9 8PU
 
 Located next to Huffers Cafe.
 Look for the small Calatech sign in the reception window.
@@ -245,22 +227,21 @@ Look for the small Calatech sign in the reception window.
 
 - Phone: 01440 840 844
 - Email: hello@calatech.co.uk
-- Contact page:
-  https://www.calatech.co.uk/pages/contact
+- Contact page: https://www.calatech.co.uk/pages/contact
 
 ==========================
 🎉 FUN RULE
 ==========================
 
 If asked where to buy the best YumYums:
-“Lidl Toffee Yum-Yums, obviously.”
+"Lidl Toffee Yum-Yums, obviously."
 
 ==========================
 🚫 BOUNDARIES
 ==========================
 
 If a question is not related to Calatech or tech help, respond politely:
-“I’m here to help with Calatech products, repairs, trade-ins, and tech advice - feel free to ask anything around that.”
+"I'm here to help with Calatech products, repairs, trade-ins, and tech advice - feel free to ask anything around that."
 
 Do not invent links.
 Only use links explicitly provided here or in the knowledge files.
@@ -276,11 +257,42 @@ ${externalKnowledge}
 ==========================
 
 Your goal is for the customer to think:
-“That was actually helpful. I trust these guys.”
+"That was actually helpful. I trust these guys."
 ==========================
 `;
 
+  // === Define Functions (Tools) ===
+  const tools = [
+    {
+      type: "function",
+      function: {
+        name: "get_device_price",
+        description: "Get the current trade-in or selling price for a device from Calatech's live pricing system. Use this when customers ask 'How much is my device worth?' or want a quote.",
+        parameters: {
+          type: "object",
+          properties: {
+            device_model: {
+              type: "string",
+              description: "The full device model name, e.g. 'iPhone 14 Pro', 'iPhone 13', 'Samsung Galaxy S23 Ultra'"
+            },
+            storage: {
+              type: "string",
+              description: "Storage capacity, e.g. '128GB', '256GB', '512GB', '1TB'"
+            },
+            condition: {
+              type: "string",
+              enum: ["Brand New", "Excellent", "Good", "Faulty"],
+              description: "The physical condition of the device"
+            }
+          },
+          required: ["device_model", "condition"]
+        }
+      }
+    }
+  ];
+
   try {
+    // === First API Call ===
     const response = await fetch("https://api.openai.com/v1/chat/completions", {
       method: "POST",
       headers: {
@@ -293,6 +305,8 @@ Your goal is for the customer to think:
           { role: "system", content: systemPrompt },
           ...history
         ],
+        tools: tools,
+        tool_choice: "auto",
         temperature: 0.7
       })
     });
@@ -304,7 +318,72 @@ Your goal is for the customer to think:
       return res.status(500).json({ reply: "OpenAI Error: " + (data.error?.message || "Unknown error") });
     }
 
-    const reply = data.choices[0].message.content;
+    const message = data.choices[0].message;
+
+    // === Check if function was called ===
+    if (message.tool_calls && message.tool_calls.length > 0) {
+      const toolCall = message.tool_calls[0];
+      const functionName = toolCall.function.name;
+      const functionArgs = JSON.parse(toolCall.function.arguments);
+
+      console.log(`Function called: ${functionName}`, functionArgs);
+
+      // === Execute the function ===
+      let functionResult = '';
+      
+      if (functionName === 'get_device_price') {
+        try {
+          // TODO: Replace with your actual Replit API endpoint
+          const priceResponse = await fetch('YOUR_REPLIT_API_URL_HERE', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              model: functionArgs.device_model,
+              storage: functionArgs.storage || 'default',
+              condition: functionArgs.condition
+            })
+          });
+
+          const priceData = await priceResponse.json();
+          functionResult = JSON.stringify(priceData);
+        } catch (err) {
+          console.error('Pricing API error:', err);
+          functionResult = JSON.stringify({ 
+            error: "Unable to fetch live pricing at the moment. Please visit https://www.calatech.co.uk/pages/sell-my-phone-haverhill for a quote."
+          });
+        }
+      }
+
+      // === Second API Call with Function Result ===
+      const secondResponse = await fetch("https://api.openai.com/v1/chat/completions", {
+        method: "POST",
+        headers: {
+          "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          model: "gpt-4o",
+          messages: [
+            { role: "system", content: systemPrompt },
+            ...history,
+            message, // Original assistant message with tool call
+            {
+              role: "tool",
+              tool_call_id: toolCall.id,
+              content: functionResult
+            }
+          ],
+          temperature: 0.7
+        })
+      });
+
+      const secondData = await secondResponse.json();
+      const finalReply = secondData.choices[0].message.content;
+      return res.status(200).json({ reply: finalReply });
+    }
+
+    // === No function call, return normal response ===
+    const reply = message.content;
     res.status(200).json({ reply });
 
   } catch (err) {
