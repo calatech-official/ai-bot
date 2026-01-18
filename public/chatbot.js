@@ -1,4 +1,4 @@
-// === Cali AI ChatBot UI - Enhanced Version ===
+// === Cali AI ChatBot - Complete Version with Glassmorphism Styling ===
 const style = document.createElement('style');
 style.innerHTML = `
   @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
@@ -468,18 +468,32 @@ const appendMessage = (sender, text, isTyping = false) => {
 
   const formattedText = text
     .replace(/\n/g, "<br>")
+    // Fix: Match URLs followed by punctuation and exclude the punctuation from the link
+    .replace(/(?<!href=")(https?:\/\/[^\s<)]+)([.,;!?)])?/g, (match, url, punctuation) => {
+      // Remove trailing punctuation from URL
+      let cleanUrl = url;
+      while (cleanUrl.match(/[.,;!?)]$/)) {
+        cleanUrl = cleanUrl.slice(0, -1);
+      }
+      const full = cleanUrl.startsWith("http") ? cleanUrl : `https://www.calatech.co.uk${cleanUrl}`;
+      return `<a href="${full}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
+    })
+    // Also handle relative URLs (starting with /)
+    .replace(/(?<!href=")(?<!https?:\/\/[^\s<]*)(\/[^\s<.,;!?)]+)([.,;!?)])?/g, (match, url, punctuation) => {
+      let cleanUrl = url;
+      while (cleanUrl.match(/[.,;!?)]$/)) {
+        cleanUrl = cleanUrl.slice(0, -1);
+      }
+      const full = `https://www.calatech.co.uk${cleanUrl}`;
+      return `<a href="${full}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
+    })
+    // Handle email addresses
     .replace(/(mailto:[\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, m =>
       `<a href="${m}" target="_blank">${m.replace("mailto:", "")}</a>`
     )
     .replace(/(?<!href="mailto:)([\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, e =>
       `<a href="mailto:${e}" target="_blank">${e}</a>`
-    )
-    .replace(/(?<!href=")(https?:\/\/[^\s<]+|\/[^\s<]+)/g, url => {
-      const full = url.startsWith("http")
-        ? url
-        : `https://www.calatech.co.uk${url}`;
-      return `<a href="${full}" target="_blank">${url}</a>`;
-    });
+    );
 
   message.innerHTML = `<strong>${sender}</strong>${formattedText}`;
 
@@ -506,7 +520,7 @@ const callGPT = async (userMessage) => {
   const typingIndicator = appendMessage("Cali AI", "", true);
 
   try {
-    const response = await fetch("https://ai-bot-pied.vercel.app/api/chat.js", {
+    const response = await fetch("https://ai-bot-gdpv.vercel.app/api/chat.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ history: conversationHistory })
