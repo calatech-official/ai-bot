@@ -378,7 +378,7 @@ chatWindow.id = "calatech-chatbot-window";
 chatWindow.innerHTML = `
   <div id="calatech-chat-header">
     <div id="calatech-chat-header-title">
-      <h3>Cali AI Assistant (Beta)</h3>
+      <h3>Cali AI Assistant</h3>
       <p>Online now</p>
     </div>
     <button id="calatech-close-button">×</button>
@@ -427,7 +427,10 @@ const toggleChat = (show) => {
     const badge = button.querySelector('.notification-badge');
     badge.style.display = 'none';
     
-    if (!sessionStorage.getItem("calatechChatWelcomed")) {
+    // Try to restore previous conversation
+    const restored = loadFromSession();
+    
+    if (!restored && !sessionStorage.getItem("calatechChatWelcomed")) {
       setTimeout(() => {
         appendMessage(
           "Cali AI",
@@ -449,9 +452,107 @@ document.getElementById("calatech-close-button").onclick = () => toggleChat(fals
 const messages = document.getElementById("calatech-chat-messages");
 const input = document.getElementById("calatech-chat-input");
 const send = document.getElementById("calatech-send-button");
-const conversationHistory = [];
+let conversationHistory = [];
 
-const appendMessage = (sender, text, isTyping = false) => {
+// === Rate Limiting ===
+const RATE_LIMIT = {
+  maxMessages: 15, // Max messages per time window
+  timeWindow: 5 * 60 * 1000, // 5 minutes in milliseconds
+  cooldownTime: 2000 // 2 seconds between messages
+};
+
+let messageTimestamps = [];
+let lastMessageTime = 0;
+
+const checkRateLimit = () => {
+  const now = Date.now();
+  
+  // Check cooldown between messages
+  if (now - lastMessageTime < RATE_LIMIT.cooldownTime) {
+    return { allowed: false, reason: "Please wait a moment before sending another message." };
+  }
+  
+  // Clean up old timestamps outside the time window
+  messageTimestamps = messageTimestamps.filter(timestamp => now - timestamp < RATE_LIMIT.timeWindow);
+  
+  // Check if user exceeded rate limit
+  if (messageTimestamps.length >= RATE_LIMIT.maxMessages) {
+    const oldestTimestamp = messageTimestamps[0];
+    const timeUntilReset = Math.ceil((RATE_LIMIT.timeWindow - (now - oldestTimestamp)) / 1000 / 60);
+    return { 
+      allowed: false, 
+      reason: `You've sent too many messages. Please wait ${timeUntilReset} minute${timeUntilReset > 1 ? 's' : ''} before continuing.` 
+    };
+  }
+  
+  return { allowed: true };
+};
+
+const recordMessage = () => {
+  const now = Date.now();
+  messageTimestamps.push(now);
+  lastMessageTime = now;
+};
+
+// === Session Storage Management ===
+const SESSION_KEY = 'calatechChatHistory';
+const SESSION_TIMESTAMP_KEY = 'calatechChatTimestamp';
+const SESSION_EXPIRY = 30 * 60 * 1000; // 30 minutes in milliseconds
+const MAX_HISTORY_LENGTH = 50; // Max messages to store
+
+const saveToSession = () => {
+  try {
+    // Only save last 12 messages to sessionStorage (keep it light)
+    const recentHistory = conversationHistory.slice(-12);
+    sessionStorage.setItem(SESSION_KEY, JSON.stringify(recentHistory));
+    sessionStorage.setItem(SESSION_TIMESTAMP_KEY, Date.now().toString());
+  } catch (err) {
+    console.error('Failed to save to session:', err);
+  }
+};
+
+const loadFromSession = () => {
+  try {
+    const savedHistory = sessionStorage.getItem(SESSION_KEY);
+    const savedTimestamp = sessionStorage.getItem(SESSION_TIMESTAMP_KEY);
+    
+    if (!savedHistory || !savedTimestamp) return false;
+    
+    const timestamp = parseInt(savedTimestamp);
+    const now = Date.now();
+    
+    // Check if session expired (30 minutes)
+    if (now - timestamp > SESSION_EXPIRY) {
+      clearSession();
+      return false;
+    }
+    
+    conversationHistory = JSON.parse(savedHistory);
+    
+    // Restore messages to UI
+    conversationHistory.forEach(msg => {
+      if (msg.role === 'user') {
+        appendMessage('You', msg.content, false, true);
+      } else if (msg.role === 'assistant') {
+        appendMessage('Cali AI', msg.content, false, true);
+      }
+    });
+    
+    return true;
+  } catch (err) {
+    console.error('Failed to load from session:', err);
+    return false;
+  }
+};
+
+const clearSession = () => {
+  sessionStorage.removeItem(SESSION_KEY);
+  sessionStorage.removeItem(SESSION_TIMESTAMP_KEY);
+  conversationHistory = [];
+};
+
+// === Message Display ===
+const appendMessage = (sender, text, isTyping = false, skipAnimation = false) => {
   if (isTyping) {
     const typingIndicator = document.createElement("div");
     typingIndicator.className = "typing-indicator";
@@ -467,6 +568,12 @@ const appendMessage = (sender, text, isTyping = false) => {
 
   const message = document.createElement("div");
   message.className = sender === "You" ? "chat-bubble user" : "chat-bubble bot";
+  
+  // Skip animation for restored messages
+  if (skipAnimation) {
+    message.style.opacity = '1';
+    message.style.animation = 'none';
+  }
 
   // Step 1: Escape any existing HTML first
   let formattedText = text
@@ -503,15 +610,24 @@ const appendMessage = (sender, text, isTyping = false) => {
 
 // === Send & Fetch AI Response ===
 const callGPT = async (userMessage) => {
+  // Check rate limit
+  const rateLimitCheck = checkRateLimit();
+  if (!rateLimitCheck.allowed) {
+    appendMessage("Cali AI", rateLimitCheck.reason);
+    return;
+  }
+  
   appendMessage("You", userMessage);
   conversationHistory.push({ role: "user", content: userMessage });
+  recordMessage();
+  saveToSession();
   
   // Hide quick actions after first message
   quickActionsContainer.style.display = 'none';
 
-  // Limit history to last 12 messages
-  if (conversationHistory.length > 12) {
-    conversationHistory.splice(0, conversationHistory.length - 12);
+  // Limit history to prevent bloat
+  if (conversationHistory.length > MAX_HISTORY_LENGTH) {
+    conversationHistory = conversationHistory.slice(-MAX_HISTORY_LENGTH);
   }
 
   send.disabled = true;
@@ -519,16 +635,20 @@ const callGPT = async (userMessage) => {
   const typingIndicator = appendMessage("Cali AI", "", true);
 
   try {
+    // Only send last 12 messages to API to keep costs down
+    const recentHistory = conversationHistory.slice(-12);
+    
     const response = await fetch("https://ai-bot-gdpv.vercel.app/api/chat.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ history: conversationHistory })
+      body: JSON.stringify({ history: recentHistory })
     });
 
     const data = await response.json();
     messages.removeChild(typingIndicator);
     appendMessage("Cali AI", data.reply);
     conversationHistory.push({ role: "assistant", content: data.reply });
+    saveToSession();
   } catch (err) {
     messages.removeChild(typingIndicator);
     appendMessage("Cali AI", "Sorry — something went wrong. Please try again or contact support at support@calatech.co.uk");
