@@ -1,0 +1,370 @@
+# Common Phone & Tablet Issues – Self-Help Knowledge Base
+
+Purpose:  
+Provide Cali AI with safe, simple troubleshooting guidance to help customers resolve common phone and tablet issues themselves, reducing unnecessary calls and store visits.
+
+Applies to:  
+iPhone, Android phones, iPads, Android tablets
+
+---
+
+## Battery & Power Issues
+
+### Battery draining quickly
+Common causes:
+- Background apps
+- High screen brightness
+- Poor signal
+- Degraded battery health
+
+Suggested self-fixes:
+- Restart the device
+- Reduce screen brightness
+- Enable Low Power / Battery Saver mode
+- Check battery usage in settings and close heavy apps
+- Update to the latest software version
+
+Escalate to store if:
+- Battery health is low
+- Device shuts down suddenly or at high percentages
+
+---
+
+### Device won’t turn on
+Common causes:
+- Fully discharged battery
+- Frozen software
+- Faulty charger or cable
+
+Suggested self-fixes:
+- Charge for at least 30 minutes
+- Try a different charging cable and plug
+- Perform a force restart (device specific)
+- Connect to a computer and wait
+
+Escalate to store if:
+- No response after charging and force restart
+- Device becomes hot or smells unusual
+
+---
+
+### Device turns off randomly
+Common causes:
+- Battery degradation
+- Software bugs
+- Cold temperatures
+
+Suggested self-fixes:
+- Update software
+- Check battery health in settings
+- Avoid cold environments
+
+Escalate to store if:
+- Happens frequently or below 30–40% battery
+
+---
+
+## Screen & Display Issues
+
+### Screen unresponsive or laggy
+Common causes:
+- Software glitch
+- Screen protector interference
+- Moisture on screen
+
+Suggested self-fixes:
+- Restart device
+- Remove screen protector
+- Clean screen with a dry cloth
+
+Escalate to store if:
+- Touch dead zones
+- Screen does not respond at all
+
+---
+
+### Screen flickering or dim
+Common causes:
+- Auto-brightness bugs
+- Display hardware issues
+
+Suggested self-fixes:
+- Disable auto-brightness
+- Restart device
+- Update software
+
+Escalate to store if:
+- Flickering continues or worsens
+
+---
+
+## Sound Issues
+
+### Can’t hear calls or speaker sounds muffled
+Common causes:
+- Blocked speaker mesh
+- Dust or debris
+- Bluetooth routing audio elsewhere
+
+Suggested self-fixes:
+- Gently clean speaker mesh
+- Turn off Bluetooth
+- Restart device
+
+Escalate to store if:
+- Sound is distorted or silent
+
+---
+
+### Microphone not working
+Common causes:
+- Blocked microphone holes
+- App permission issues
+
+Suggested self-fixes:
+- Clean mic openings gently
+- Check microphone permissions for the app
+- Test using a voice recorder
+
+Escalate to store if:
+- No sound is recorded at all
+
+---
+
+## Connectivity Issues
+
+### Poor signal or no service
+Common causes:
+- Network outages
+- SIM card issues
+- Software bugs
+
+Suggested self-fixes:
+- Toggle Airplane Mode on and off
+- Restart device
+- Remove and reinsert SIM card
+- Reset network settings
+
+Escalate to store if:
+- No signal with a known-working SIM
+
+---
+
+### Wi-Fi or Bluetooth not working
+Common causes:
+- Software glitches
+- Router interference
+
+Suggested self-fixes:
+- Restart device
+- Forget and reconnect to network
+- Restart router
+- Reset network settings
+
+Escalate to store if:
+- Wi-Fi or Bluetooth toggle is missing or greyed out
+
+---
+
+## Camera Issues
+
+### Camera blurry or won’t focus
+Common causes:
+- Dirty lens
+- Smudged camera protector
+- Software glitches
+
+Suggested self-fixes:
+- Clean camera lens gently
+- Remove camera protector
+- Restart device
+
+Escalate to store if:
+- Camera shakes, shows black screen, or never focuses
+
+---
+
+### Camera app crashes
+Common causes:
+- Software corruption
+- Low storage space
+
+Suggested self-fixes:
+- Restart device
+- Update software
+- Free up storage space
+
+Escalate to store if:
+- Crashes persist after restart and updates
+
+---
+
+## Software & Performance Issues
+
+### Device running slow
+Common causes:
+- Full storage
+- Too many background apps
+- Outdated software
+
+Suggested self-fixes:
+- Restart device
+- Delete unused apps and files
+- Update software
+
+Escalate to store if:
+- Device freezes regularly
+
+---
+
+### Apps crashing repeatedly
+Common causes:
+- Outdated apps
+- Corrupt app data
+
+Suggested self-fixes:
+- Update apps
+- Reinstall affected apps
+- Restart device
+
+Escalate to store if:
+- Multiple apps crash frequently
+
+---
+
+### Storage full
+Common causes:
+- Photos and videos
+- Messaging app media
+- App cache
+
+Suggested self-fixes:
+- Delete unused apps
+- Back up photos to cloud storage
+- Clear large message attachments
+
+Escalate to store if:
+- Storage does not free up after cleanup
+
+---
+
+## Charging Issues
+
+### Device not charging properly
+Common causes:
+- Dirty charging port
+- Faulty cable
+- Weak power source
+
+Suggested self-fixes:
+- Try a different cable and plug
+- Restart device
+- Visually inspect port (no tools)
+
+Escalate to store if:
+- Cable won’t insert properly
+- Charging cuts in and out
+
+---
+
+### Device charging slowly
+Common causes:
+- Low-power charger
+- Background apps
+- Battery health issues
+
+Suggested self-fixes:
+- Use the correct charger
+- Close background apps
+- Enable Low Power mode
+
+Escalate to store if:
+- Charging remains unusually slow
+
+---
+
+## Water & Physical Damage
+
+### Device exposed to liquid
+Immediate advice:
+- Power off device immediately
+- Do not charge
+- Dry the exterior gently
+
+Important rules:
+- Never suggest rice
+- Never suggest heat or hairdryers
+
+Always escalate to store for:
+- Any liquid exposure
+
+---
+
+### Dropped device or cracked screen
+Suggested self-fixes:
+- None
+
+Escalate to store if:
+- Cracks spreading
+- Touch or display affected
+- Sharp glass exposed
+
+---
+
+## Security & Access Issues
+
+### Forgotten passcode
+Suggested self-fixes:
+- Use official account recovery methods
+
+Escalate to store if:
+- Customer needs help understanding reset options
+
+---
+
+### Face ID or fingerprint not working
+Common causes:
+- Dirty sensors
+- Software glitches
+
+Suggested self-fixes:
+- Clean sensors
+- Re-enrol biometrics
+- Restart device
+
+Escalate to store if:
+- Biometric hardware not detected
+
+---
+
+## Global Safety Rules for AI
+
+The AI must never:
+- Suggest opening the device
+- Suggest metal tools
+- Suggest heat or rice
+- Suggest charging after liquid exposure
+
+Always escalate:
+- Liquid damage
+- Battery swelling
+- Overheating
+- Burning smells
+- Safety concerns
+
+---
+
+## Default AI Framing
+
+Recommended phrasing:
+“If you’d like, I can guide you through a few quick checks that often fix this without needing a store visit.”
+
+---
+
+## When to Recommend a Store Visit
+- Liquid exposure
+- Physical damage
+- Battery swelling
+- No power after charging
+- Repeated crashes after resets
+- Any safety-related concern
