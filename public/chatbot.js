@@ -378,7 +378,7 @@ chatWindow.id = "calatech-chatbot-window";
 chatWindow.innerHTML = `
   <div id="calatech-chat-header">
     <div id="calatech-chat-header-title">
-      <h3>Cali AI Assistant</h3>
+      <h3>Cali AI Assistant (Beta)</h3>
       <p>Online now</p>
     </div>
     <button id="calatech-close-button">×</button>
