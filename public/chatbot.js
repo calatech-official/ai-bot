@@ -1,37 +1,45 @@
 // === Cali AI ChatBot UI - Enhanced Version ===
 const style = document.createElement('style');
 style.innerHTML = `
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+  
   #calatech-chatbot-button {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
     color: white;
-    padding: 14px 24px;
+    padding: 16px 28px;
     border-radius: 9999px;
     font-size: 15px;
     font-weight: 600;
     cursor: pointer;
     z-index: 9999;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.25);
+    box-shadow: 0 8px 32px rgba(0, 195, 138, 0.3);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     border: none;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    backdrop-filter: blur(10px);
   }
   #calatech-chatbot-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 16px 48px rgba(0, 195, 138, 0.4);
+    background: linear-gradient(135deg, #00d899 0%, #00C38A 100%);
+  }
+  #calatech-chatbot-button:active {
+    transform: translateY(-1px) scale(0.98);
   }
   #calatech-chatbot-button .notification-badge {
     position: absolute;
     top: -4px;
     right: -4px;
-    background: #ff4444;
+    background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
     color: white;
-    width: 20px;
-    height: 20px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     font-size: 11px;
     display: none;
@@ -39,67 +47,74 @@ style.innerHTML = `
     justify-content: center;
     font-weight: 700;
     animation: pulse 2s infinite;
+    box-shadow: 0 2px 8px rgba(255, 107, 107, 0.4);
   }
   @keyframes pulse {
     0%, 100% { transform: scale(1); }
-    50% { transform: scale(1.1); }
+    50% { transform: scale(1.15); }
   }
   #calatech-chatbot-window {
     position: fixed;
-    bottom: 80px;
+    bottom: 90px;
     right: 20px;
-    width: 380px;
-    max-height: 600px;
-    background: #fff;
-    border: 1px solid #e0e0e0;
-    border-radius: 20px;
+    width: 400px;
+    max-height: 650px;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(40px) saturate(180%);
+    -webkit-backdrop-filter: blur(40px) saturate(180%);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 24px;
     display: none;
     flex-direction: column;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     z-index: 9999;
-    box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.12), 0 0 1px rgba(0, 0, 0, 0.05);
     overflow: hidden;
-    animation: slideUp 0.3s ease;
+    animation: slideUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   @keyframes slideUp {
     from {
       opacity: 0;
-      transform: translateY(20px);
+      transform: translateY(30px) scale(0.95);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
   #calatech-chat-header {
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
     color: white;
-    padding: 18px 20px;
+    padding: 20px 24px;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #444;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
   }
   #calatech-chat-header-title {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 3px;
   }
   #calatech-chat-header-title h3 {
     margin: 0;
-    font-size: 16px;
-    font-weight: 600;
+    font-size: 17px;
+    font-weight: 700;
+    letter-spacing: -0.3px;
   }
   #calatech-chat-header-title p {
     margin: 0;
-    font-size: 12px;
-    opacity: 0.8;
+    font-size: 13px;
+    opacity: 0.9;
+    font-weight: 500;
   }
   #calatech-close-button {
-    background: transparent;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(10px);
     border: none;
     color: white;
-    font-size: 24px;
+    font-size: 22px;
     cursor: pointer;
     padding: 0;
     width: 32px;
@@ -107,98 +122,111 @@ style.innerHTML = `
     display: flex;
     align-items: center;
     justify-content: center;
-    border-radius: 8px;
-    transition: background 0.2s;
+    border-radius: 10px;
+    transition: all 0.2s;
+    font-weight: 300;
   }
   #calatech-close-button:hover {
-    background: rgba(255,255,255,0.1);
+    background: rgba(255, 255, 255, 0.25);
+    transform: scale(1.05);
   }
   #calatech-chat-messages {
-    padding: 20px;
+    padding: 24px 20px;
     flex: 1;
     overflow-y: auto;
-    font-size: 14px;
+    font-size: 14.5px;
     line-height: 1.6;
     display: flex;
     flex-direction: column;
-    gap: 4px;
-    background: #f9fafb;
+    gap: 6px;
+    background: linear-gradient(to bottom, rgba(247, 250, 252, 0.5), rgba(241, 245, 249, 0.3));
   }
   #calatech-chat-messages::-webkit-scrollbar {
     width: 6px;
   }
+  #calatech-chat-messages::-webkit-scrollbar-track {
+    background: transparent;
+  }
   #calatech-chat-messages::-webkit-scrollbar-thumb {
-    background: #ccc;
+    background: rgba(0, 195, 138, 0.2);
     border-radius: 3px;
   }
+  #calatech-chat-messages::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 195, 138, 0.3);
+  }
   .chat-bubble {
-    padding: 12px 16px;
-    border-radius: 16px;
-    margin-bottom: 8px;
-    max-width: 80%;
+    padding: 14px 18px;
+    border-radius: 18px;
+    margin-bottom: 10px;
+    max-width: 82%;
     word-wrap: break-word;
     line-height: 1.5;
     position: relative;
     opacity: 0;
-    animation: fadeInUp 0.4s ease forwards;
+    animation: fadeInUp 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
   }
   .chat-bubble.user {
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
     color: white;
     align-self: flex-end;
     text-align: left;
-    border-bottom-right-radius: 4px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    border-bottom-right-radius: 6px;
+    box-shadow: 0 4px 16px rgba(0, 195, 138, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.1);
   }
   .chat-bubble.bot {
-    background: white;
-    color: #1a1a1a;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    color: #1e293b;
     align-self: flex-start;
-    border-bottom-left-radius: 4px;
-    border: 1px solid #e5e7eb;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    border-bottom-left-radius: 6px;
+    border: 1px solid rgba(0, 195, 138, 0.1);
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   }
   .chat-bubble strong {
     display: block;
     margin-bottom: 6px;
     font-size: 12px;
-    opacity: 0.7;
+    opacity: 0.8;
     font-weight: 600;
+    letter-spacing: 0.3px;
+    text-transform: uppercase;
   }
   .chat-bubble.user strong {
-    opacity: 0.85;
+    opacity: 0.9;
   }
   @keyframes fadeInUp {
     from {
       opacity: 0;
-      transform: translateY(10px);
+      transform: translateY(15px) scale(0.95);
     }
     to {
       opacity: 1;
-      transform: translateY(0);
+      transform: translateY(0) scale(1);
     }
   }
   .typing-indicator {
     display: flex;
     align-items: center;
     gap: 6px;
-    padding: 12px 16px;
-    background: white;
-    border: 1px solid #e5e7eb;
-    border-radius: 16px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 195, 138, 0.1);
+    border-radius: 18px;
     align-self: flex-start;
-    max-width: 80px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+    max-width: 90px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   }
   .typing-dots {
     display: inline-flex;
-    gap: 4px;
+    gap: 5px;
   }
   .typing-dots span {
     display: block;
     width: 8px;
     height: 8px;
-    background: #888;
+    background: linear-gradient(135deg, #00C38A, #00a575);
     border-radius: 50%;
     animation: typing 1.4s infinite ease-in-out;
   }
@@ -211,48 +239,62 @@ style.innerHTML = `
   @keyframes typing {
     0%, 60%, 100% {
       transform: translateY(0);
-      opacity: 0.6;
+      opacity: 0.7;
     }
     30% {
-      transform: translateY(-8px);
+      transform: translateY(-10px);
       opacity: 1;
     }
   }
   #calatech-chat-input-area {
     display: flex;
-    gap: 10px;
-    border-top: 1px solid #e5e7eb;
-    padding: 16px;
-    background: white;
+    gap: 12px;
+    border-top: 1px solid rgba(0, 195, 138, 0.1);
+    padding: 18px 20px;
+    background: rgba(255, 255, 255, 0.98);
+    backdrop-filter: blur(20px);
   }
   #calatech-chat-input {
     flex: 1;
-    border: 2px solid #e5e7eb;
-    border-radius: 12px;
-    padding: 12px 16px;
-    font-size: 14px;
+    border: 2px solid rgba(0, 195, 138, 0.15);
+    border-radius: 14px;
+    padding: 13px 16px;
+    font-size: 14.5px;
     outline: none;
-    transition: border-color 0.2s;
-    font-family: inherit;
+    transition: all 0.2s;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: rgba(255, 255, 255, 0.95);
+    color: #1e293b;
   }
   #calatech-chat-input:focus {
-    border-color: #2d2d2d;
+    border-color: #00C38A;
+    box-shadow: 0 0 0 4px rgba(0, 195, 138, 0.1);
+    background: white;
+  }
+  #calatech-chat-input::placeholder {
+    color: #94a3b8;
   }
   #calatech-send-button {
-    background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
     color: white;
     border: none;
-    padding: 12px 20px;
-    font-size: 14px;
-    border-radius: 12px;
+    padding: 13px 24px;
+    font-size: 14.5px;
+    border-radius: 14px;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
     font-weight: 600;
-    min-width: 70px;
+    min-width: 75px;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    box-shadow: 0 4px 16px rgba(0, 195, 138, 0.2);
   }
   #calatech-send-button:hover:not(:disabled) {
-    transform: translateY(-1px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 24px rgba(0, 195, 138, 0.3);
+    background: linear-gradient(135deg, #00d899 0%, #00C38A 100%);
+  }
+  #calatech-send-button:active:not(:disabled) {
+    transform: translateY(0);
   }
   #calatech-send-button:disabled {
     opacity: 0.5;
@@ -260,47 +302,61 @@ style.innerHTML = `
     transform: none;
   }
   .chat-bubble a {
-    color: #2563eb;
-    text-decoration: underline;
+    color: #00C38A;
+    text-decoration: none;
     word-break: break-word;
-    transition: color 0.2s;
+    transition: all 0.2s;
+    font-weight: 600;
+    border-bottom: 1px solid rgba(0, 195, 138, 0.3);
   }
   .chat-bubble a:hover {
-    color: #1e40af;
+    color: #00a575;
+    border-bottom-color: #00a575;
   }
   .chat-bubble.user a {
-    color: #93c5fd;
+    color: white;
+    border-bottom-color: rgba(255, 255, 255, 0.5);
   }
   .chat-bubble.user a:hover {
-    color: #bfdbfe;
+    border-bottom-color: white;
   }
   .quick-actions {
     display: flex;
     flex-wrap: wrap;
     gap: 8px;
-    padding: 0 20px 16px;
-    background: #f9fafb;
+    padding: 0 20px 18px;
+    background: linear-gradient(to bottom, rgba(241, 245, 249, 0.3), rgba(247, 250, 252, 0.5));
   }
   .quick-action-btn {
-    background: white;
-    border: 1px solid #e5e7eb;
-    padding: 8px 14px;
-    border-radius: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(20px);
+    border: 1px solid rgba(0, 195, 138, 0.2);
+    padding: 10px 16px;
+    border-radius: 12px;
     font-size: 13px;
     cursor: pointer;
     transition: all 0.2s;
-    color: #374151;
+    color: #334155;
     font-weight: 500;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
   .quick-action-btn:hover {
-    background: #f3f4f6;
-    border-color: #d1d5db;
-    transform: translateY(-1px);
+    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
+    border-color: #00C38A;
+    color: white;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0, 195, 138, 0.2);
   }
   @media (max-width: 480px) {
     #calatech-chatbot-window {
-      width: calc(100vw - 40px);
-      max-height: 500px;
+      width: calc(100vw - 32px);
+      max-height: 600px;
+      bottom: 80px;
+      right: 16px;
+    }
+    #calatech-chatbot-button {
+      bottom: 16px;
+      right: 16px;
     }
   }
 `;
@@ -450,7 +506,7 @@ const callGPT = async (userMessage) => {
   const typingIndicator = appendMessage("Cali AI", "", true);
 
   try {
-    const response = await fetch("https://ai-bot-gdpv.vercel.app/api/chat.js", {
+    const response = await fetch("https://ai-bot-pied.vercel.app/api/chat.js", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ history: conversationHistory })
