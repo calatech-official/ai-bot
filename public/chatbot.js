@@ -7,30 +7,32 @@ style.innerHTML = `
     position: fixed;
     bottom: 20px;
     right: 20px;
-    background: linear-gradient(135deg, #00C38A 0%, #00a575 100%);
-    color: white;
-    padding: 16px 28px;
-    border-radius: 9999px;
-    font-size: 15px;
-    font-weight: 600;
+    width: 64px;
+    height: 64px;
+    background: white;
+    color: #00C38A;
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 700;
     cursor: pointer;
     z-index: 9999;
-    box-shadow: 0 8px 32px rgba(0, 195, 138, 0.3);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
+    border: 2px solid #00C38A;
     display: flex;
     align-items: center;
-    gap: 10px;
+    justify-content: center;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    backdrop-filter: blur(10px);
+    letter-spacing: 0.5px;
   }
   #calatech-chatbot-button:hover {
-    transform: translateY(-3px) scale(1.02);
-    box-shadow: 0 16px 48px rgba(0, 195, 138, 0.4);
-    background: linear-gradient(135deg, #00d899 0%, #00C38A 100%);
+    transform: translateY(-4px) scale(1.08);
+    box-shadow: 0 16px 48px rgba(0, 195, 138, 0.25);
+    border-color: #00d899;
+    color: #00d899;
   }
   #calatech-chatbot-button:active {
-    transform: translateY(-1px) scale(0.98);
+    transform: translateY(-2px) scale(1.03);
   }
   #calatech-chatbot-button .notification-badge {
     position: absolute;
@@ -368,8 +370,7 @@ document.head.appendChild(style);
 const button = document.createElement("div");
 button.id = "calatech-chatbot-button";
 button.innerHTML = `
-  <span>💬</span>
-  <span>Chat with Cali</span>
+  <span>Cali</span>
   <span class="notification-badge">1</span>
 `;
 
