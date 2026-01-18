@@ -184,15 +184,17 @@ style.innerHTML = `
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.05);
   }
   .chat-bubble strong {
+    font-weight: 600;
+  }
+  .chat-bubble > strong:first-child {
     display: block;
     margin-bottom: 6px;
     font-size: 12px;
     opacity: 0.8;
-    font-weight: 600;
     letter-spacing: 0.3px;
     text-transform: uppercase;
   }
-  .chat-bubble.user strong {
+  .chat-bubble.user > strong:first-child {
     opacity: 0.9;
   }
   @keyframes fadeInUp {
@@ -466,20 +468,24 @@ const appendMessage = (sender, text, isTyping = false) => {
   const message = document.createElement("div");
   message.className = sender === "You" ? "chat-bubble user" : "chat-bubble bot";
 
-  const formattedText = text
+  // Convert markdown to HTML
+  let formattedText = text
+    // Bold text: **text** -> <strong>text</strong>
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // Newlines to breaks
     .replace(/\n/g, "<br>")
-    // Fix: Match URLs followed by punctuation and exclude the punctuation from the link
-    .replace(/(?<!href=")(https?:\/\/[^\s<)]+)([.,;!?)])?/g, (match, url, punctuation) => {
-      // Remove trailing punctuation from URL
+    // Fix markdown links: [text](url) -> <a>
+    .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
+    // Handle URLs followed by punctuation
+    .replace(/(?<!href=["'])(https?:\/\/[^\s<)]+)([.,;!?)])?/g, (match, url, punctuation) => {
       let cleanUrl = url;
       while (cleanUrl.match(/[.,;!?)]$/)) {
         cleanUrl = cleanUrl.slice(0, -1);
       }
-      const full = cleanUrl.startsWith("http") ? cleanUrl : `https://www.calatech.co.uk${cleanUrl}`;
-      return `<a href="${full}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
+      return `<a href="${cleanUrl}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
     })
-    // Also handle relative URLs (starting with /)
-    .replace(/(?<!href=")(?<!https?:\/\/[^\s<]*)(\/[^\s<.,;!?)]+)([.,;!?)])?/g, (match, url, punctuation) => {
+    // Handle relative URLs (starting with /)
+    .replace(/(?<!href=["'])(?<!https?:\/\/[^\s<]*)(\/[^\s<.,;!?)]+)([.,;!?)])?/g, (match, url, punctuation) => {
       let cleanUrl = url;
       while (cleanUrl.match(/[.,;!?)]$/)) {
         cleanUrl = cleanUrl.slice(0, -1);
@@ -487,11 +493,12 @@ const appendMessage = (sender, text, isTyping = false) => {
       const full = `https://www.calatech.co.uk${cleanUrl}`;
       return `<a href="${full}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
     })
-    // Handle email addresses
+    // Handle email with mailto:
     .replace(/(mailto:[\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, m =>
       `<a href="${m}" target="_blank">${m.replace("mailto:", "")}</a>`
     )
-    .replace(/(?<!href="mailto:)([\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, e =>
+    // Handle plain email addresses
+    .replace(/(?<!href=["']mailto:)([\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, e =>
       `<a href="mailto:${e}" target="_blank">${e}</a>`
     );
 
