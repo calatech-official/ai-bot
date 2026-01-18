@@ -468,39 +468,31 @@ const appendMessage = (sender, text, isTyping = false) => {
   const message = document.createElement("div");
   message.className = sender === "You" ? "chat-bubble user" : "chat-bubble bot";
 
-  // Convert markdown to HTML
+  // Step 1: Escape any existing HTML first
   let formattedText = text
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;');
+
+  // Step 2: Convert markdown to HTML (in order)
+  formattedText = formattedText
     // Bold text: **text** -> <strong>text</strong>
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    // Newlines to breaks
-    .replace(/\n/g, "<br>")
-    // Fix markdown links: [text](url) -> <a>
+    .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
+    // Markdown links: [text](url) -> <a href="url">text</a>
     .replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank">$1</a>')
-    // Handle URLs followed by punctuation
-    .replace(/(?<!href=["'])(https?:\/\/[^\s<)]+)([.,;!?)])?/g, (match, url, punctuation) => {
-      let cleanUrl = url;
-      while (cleanUrl.match(/[.,;!?)]$/)) {
-        cleanUrl = cleanUrl.slice(0, -1);
-      }
-      return `<a href="${cleanUrl}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
+    // Plain URLs with optional punctuation after
+    .replace(/(^|[^"'>=])(https?:\/\/[^\s<]+?)([.,;!?)])?(\s|$)/g, (match, before, url, punct, after) => {
+      return `${before}<a href="${url}" target="_blank">${url}</a>${punct || ''}${after}`;
     })
-    // Handle relative URLs (starting with /)
-    .replace(/(?<!href=["'])(?<!https?:\/\/[^\s<]*)(\/[^\s<.,;!?)]+)([.,;!?)])?/g, (match, url, punctuation) => {
-      let cleanUrl = url;
-      while (cleanUrl.match(/[.,;!?)]$/)) {
-        cleanUrl = cleanUrl.slice(0, -1);
-      }
-      const full = `https://www.calatech.co.uk${cleanUrl}`;
-      return `<a href="${full}" target="_blank">${cleanUrl}</a>${punctuation || ''}`;
+    // Relative URLs like /pages/contact
+    .replace(/(^|[^"'>=])(\/[a-zA-Z0-9\-_/]+)([.,;!?)])?(\s|$)/g, (match, before, path, punct, after) => {
+      const fullUrl = `https://www.calatech.co.uk${path}`;
+      return `${before}<a href="${fullUrl}" target="_blank">${path}</a>${punct || ''}${after}`;
     })
-    // Handle email with mailto:
-    .replace(/(mailto:[\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, m =>
-      `<a href="${m}" target="_blank">${m.replace("mailto:", "")}</a>`
-    )
-    // Handle plain email addresses
-    .replace(/(?<!href=["']mailto:)([\w.+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, e =>
-      `<a href="mailto:${e}" target="_blank">${e}</a>`
-    );
+    // Email addresses
+    .replace(/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/g, '<a href="mailto:$1" target="_blank">$1</a>')
+    // Line breaks
+    .replace(/\n/g, '<br>');
 
   message.innerHTML = `<strong>${sender}</strong>${formattedText}`;
 
